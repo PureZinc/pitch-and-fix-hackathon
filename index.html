@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ShopEase - Your One-Stop Shop</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudfare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -48,124 +49,12 @@
 
     <section class="featured-products">
         <h2>Featured Products</h2>
-        <div class="product-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/product1.jpg" alt="Product 1">
-                    <div class="product-tag">Sale</div>
-                </div>
-                <div class="product-details">
-                    <h3 class="product-title">Wireless Headphones</h3>
-                    <div class="product-price">
-                        <span class="original-price">$120</span>
-                        <span class="sale-price">99.99</span>
-                    </div>
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span class="rating-count">(42)</span>
-                    </div>
-                    <button class="add-to-cart-btn" data-product-id="1" data-product-name="Wireless Headphones" data-product-price="99.99">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/product2.jpg" alt="Product 2">
-                </div>
-                <div class="product-details">
-                    <h3 class="product-title">Smart Watch</h3>
-                    <div class="product-price">
-                        <span class="current-price">$199.99</span>
-                    </div>
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                        <span class="rating-count">(28)</span>
-                    </div>
-                    <button class="add-to-cart-btn" data-product-id="2" data-product-name="Smart Watch">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="images/product3.jpg" alt="Product 3">
-                    <div class="product-tag">New</div>
-                </div>
-                <div class="product-details">
-                    <h3 class="product-title">Bluetooth Speaker</h3>
-                    <div class="product-price">
-                        <span class="current-price">$79.99</span>
-                    </div>
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <i class="far fa-star"></i>
-                        <span class="rating-count">(17)</span>
-                    </div>
-                    <button class="add-to-cart-btn" data-product-id="3" data-product-name="Bluetooth Speaker" data-product-price="79.99">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="" alt="Product 4">
-                </div>
-                <div class="product-details">
-                    <h3 class="product-title">Laptop Bag</h3>
-                    <div class="product-price">
-                        <span class="current-price">$49.99</span>
-                    </div>
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <span class="rating-count">(35)</span>
-                    </div>
-                    <button class="add-to-cart-btn" data-product-id="4" data-product-name="Laptop Bag" data-product-price="49.99">Add to Cart</button>
-                </div>
-            </div>
-
-        </div>
+        <div class="featured-product-grid"></div>
     </section>
 
     <section class="categories">
         <h2>Shop by Category</h2>
-        <div class="category-grid">
-            <div class="category-card">
-                <img src="images/category1.jpg" alt="Electronics Category">
-                <h3>Electronics</h3>
-                <a href="pages/categories.html#electronics" class="category-link">View All</a>
-            </div>
-            <div class="category-card">
-                <img src="images/category2.jpg" alt="Clothing Category">
-                <h3>Clothing</h3>
-                <a href="pages/categories.html#clothing" class="category-link">View All</a>
-            </div>
-            <div class="category-card">
-                <img src="images/category3.jpg" alt="Home & Kitchen Category">
-                <h3>Home & Kitchen</h3>
-                <a href="pages/categories.html#home" class="category-link">View All</a>
-            </div>
-            <div class="category-card">
-                <img src="images/category4.jpg" alt="Sports & Outdoors Category">
-                <h3>Sports & Outdoors</h3>
-                <a href="pages/categories.html#sports" class="category-link">View All</a>
-        </div>
+        <div class="category-grid"></div>
     </section>
 
     <section class="newsletter">
@@ -228,4 +117,6 @@
 
     <script src="js/main.js"></script>
     <script src="js/cart.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/categories.js"></script>
 </body>
