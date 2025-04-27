@@ -57,7 +57,7 @@ function setupTabNavigation() {
 
 // Setup quantity controls
 function setupQuantityControls() {
-  const decreaseBtn = document.getElementById("decrease-qty");
+  const decreaseBtn = document.getElementById("decrease-quantity");
   const increaseBtn = document.getElementById("increase-quantity");
   const quantityInput = document.getElementById("quantity");
 

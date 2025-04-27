@@ -9,9 +9,10 @@
     <title>Product Detail - ShopEase</title>
     <link rel="stylesheet" href="../css/styles.css" />
     <link rel="stylesheet" href="../css/responsive.css" />
+    <link rel="stylesheet" href="../css/cat.css" />
     <link rel="stylesheet" href="../css/product-detail.css" />
 
-    <!-- Intentional bug: Font awesome link is broken -->
+    <!-- Intentional bug: Font awesome link is broken | FIXED -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -56,7 +57,7 @@
     <main class="product-detail-container">
       <div class="product-images">
         <div class="main-image">
-          <!-- Intentional bug: image will be loaded through JavaScript but with incorrect selector -->
+          <!-- Intentional bug: image will be loaded through JavaScript but with incorrect selector | FIXED -->
           <img
             id="main-product-img"
             src="../images/product1.jpg"
@@ -64,7 +65,7 @@
           />
         </div>
         <div class="thumbnail-gallery">
-          <!-- Intentional bug: onclick handlers using incorrect function names -->
+          <!-- Intentional bug: onclick handlers using incorrect function names | FIXED -->
           <img
             src="../images/product1.jpg"
             alt="Wireless Headphones - Front"
@@ -81,13 +82,13 @@
             src="../images/product1-back.jpg"
             alt="Wireless Headphones - Back"
             class="thumbnail"
-            onclick="changeMainImg(this)"
+            onclick="changeMainImage(this)"
           />
           <img
             src="../images/product1-case.jpg"
             alt="Wireless Headphones - Case"
             class="thumbnail"
-            onclick="switchImage(this)"
+            onclick="changeMainImage(this)"
           />
         </div>
       </div>
@@ -126,7 +127,7 @@
           <div class="color-options">
             <h3>Color:</h3>
             <div class="color-selector">
-              <!-- Intentional bug: using classes inconsistently -->
+              <!-- Intentional bug: using classes inconsistently | FIXED -->
               <div
                 class="color-option selected"
                 data-color="black"
@@ -138,7 +139,7 @@
                 style="background-color: #fff; border: 1px solid #ddd"
               ></div>
               <div
-                class="color-choice"
+                class="color-option"
                 data-color="blue"
                 style="background-color: #0078d4"
               ></div>
@@ -155,12 +156,13 @@
           </div>
         </div>
         <div class="purchase-actions">
-          <!-- Intentional bug: missing data-product-price attribute -->
+          <!-- Intentional bug: missing data-product-price attribute | FIXED -->
           <button
             id="add-to-cart"
             class="add-to-cart-btn"
             data-product-id="1"
             data-product-name="Wireless Headphones"
+            data-product-price="99.99"
           >
             Add to Cart
           </button>
@@ -183,7 +185,7 @@
 
     <section class="product-tabs">
       <div class="tabs-header">
-        <!-- Intentional bug: missing data-tab attribute on one tab -->
+        <!-- Intentional bug: missing data-tab attribute on one tab | FIXED -->
         <button class="tab-btn active" data-tab="description">
           Description
         </button>
@@ -193,6 +195,7 @@
         <button class="tab-btn" data-tab="reviews">Reviews</button>
         <button class="tab-btn" data-tab="shipping">Shipping & Returns</button>
       </div>
+
       <div class="tabs-content">
         <div id="description" class="tab-content active">
           <h2>Product Description</h2>
@@ -244,7 +247,7 @@
               <th>Weight</th>
               <td>250g</td>
             </tr>
-            <!-- Intentional bug: missing closing table tag -->
+            <!-- Intentional bug: missing closing table tag | FIXED -->
           </table>
         </div>
         <div id="reviews" class="tab-content">
@@ -414,7 +417,15 @@
               warranty covering defects in materials and workmanship. Extended
               warranty options are available at checkout.
             </p>
-            <!-- Intentional bug: missing contact information for warranty claims -->
+            <p>
+              For warranty claims, please contact our support team at:
+              <ul>
+                <li>Email: <a href="mailto:support@shopease.com">support@shopease.com</a></li>
+                <li>Phone: 1-800-555-1234</li>
+                <li>Address: 123 ShopEase Lane, Tech City, TX 75001</li>
+              </ul>
+            </p>
+            <!-- Intentional bug: missing contact information for warranty claims | FIXED -->
           </div>
         </div>
       </div>
@@ -422,13 +433,26 @@
 
     <section class="related-products">
       <h2>You May Also Like</h2>
-      <div class="product-grid">
-        <!-- Intentional bug: missing product card structure -->
+      <div class="related-product-grid">
+        <!-- Intentional bug: missing product card structure | FIXED -->
         <div class="product-card">
-          <img src="../images/product2.jpg" alt="Smart Watch" />
-          <h3>Smart Watch</h3>
-          <p class="price">$199.99</p>
-          <button class="quick-view-btn">Quick View</button>
+          <div class="product-image">
+            <img src="../images/product2.jpg" alt="Smart Watch" />
+          </div>
+          <div class="product-details">
+            <h3 class="product-title">Smart Watch</h3>
+            <div class="product-price">
+              <span class="current-price">$199.99</span>
+            </div>
+            <button
+              class="add-to-cart-btn"
+              data-product-id="2"
+              data-product-name="Smart Watch"
+              data-product-price="199.99"
+            >
+              Add to Cart
+            </button>
+          </div>
         </div>
 
         <div class="product-card">
@@ -474,7 +498,9 @@
     </section>
 
     <section class="recently-viewed">
-      <!-- Intentional bug: empty section with no content -->
+      <!-- Intentional bug: empty section with no content | FIXED -->
+       <h2>Recently Viewed</h2>
+        <div class="recently-viewed-grid"></div>
     </section>
 
     <footer>
@@ -534,5 +560,6 @@
     <script src="../js/main.js"></script>
     <script src="../js/cart.js"></script>
     <script src="../js/product-detail.js"></script>
+    <script src="../js/products.js"></script>
   </body>
 </html>

@@ -9,6 +9,7 @@ function renderProducts() {
     // Get HTML Elements
     const productGrid = document.querySelector(".product-grid");
     const featuredProductGrid = document.querySelector(".featured-product-grid");
+    const recentlyViewedGrid = document.querySelector(".recently-viewed-grid");
 
     // Render subcomponents
     const productRating = (product) => `
@@ -45,25 +46,47 @@ function renderProducts() {
     // Render products
     if (productGrid) productGrid.innerHTML = products.map(product => productCard(product)).join('');
     if (featuredProductGrid) featuredProductGrid.innerHTML = products.filter(product => product.featured).map(product => productCard(product)).join('');
+    if (recentlyViewedGrid) {
+        const recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+        recentlyViewedGrid.innerHTML = recentlyViewed.map(product => productCard(product)).join('');
+    }
 }
 
 
 function renderEventListeners() {
-    const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
-    addToCartButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            const productId = this.getAttribute("data-product-id");
-            const productName = this.getAttribute("data-product-name");
-            const productPrice = parseFloat(this.getAttribute("data-product-price"));
-            addToCart(productId, productName, productPrice);
-        });
-    });
+    function addToRecentlyViewed(product) {
+        const recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+        if (!recentlyViewed.some(p => p.id === product.id)) {
+            if (recentlyViewed.length >= 4) recentlyViewed.shift(); // Remove the oldest item to maintain max length of 4
+            recentlyViewed.push(product);
+            localStorage.setItem("recentlyViewed", JSON.stringify(recentlyViewed));
+        }
+    }
 
     const productCards = document.querySelectorAll(".product-card");
     productCards.forEach(card => {
-        card.addEventListener("click", function () {
+        card.addEventListener("click", function (event) {
+            // if add-to-cart-btn is clicked, do not redirect
+            if (event.target.classList.contains("add-to-cart-btn")) {
+                // Instead, add to cart and return
+                const product = this.querySelector(".add-to-cart-btn");
+                const productId = product.getAttribute("data-product-id");
+                const productName = product.getAttribute("data-product-name");
+                const productPrice = parseFloat(product.getAttribute("data-product-price"));
+                addToCart(productId, productName, productPrice);
+                return;
+            };
+
+            // Link to product detail page
             const productId = this.querySelector(".add-to-cart-btn").getAttribute("data-product-id");
-            window.location.href = `pages/product-detail.html#${productId}`;
+            window.location.href = `/pages/product-detail.html#${productId}`;
+            
+
+            // Add to recently viewed products
+            const product = products.find(p => p.id == productId);
+            if (product) {
+                addToRecentlyViewed(product);
+            }
         });
     });
 }
