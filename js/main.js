@@ -113,6 +113,43 @@ const products = [
     }
 ];
 
+const backendURL = "http://localhost:3000";
+
+
+// Utility functions
+async function getBackend(url) {
+  return fetch(`${backendURL}${url}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+    });
+}
+
+async function postBackend(url, data) { 
+  return fetch(`${backendURL}${url}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+    });
+}
+
+
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize the site
@@ -189,11 +226,15 @@ function setupNewsletterForm() {
       const emailInput = document.getElementById("newsletter-email");
       const email = emailInput.value;
 
-      // Simulate subscription
-      setTimeout(() => {
-        emailInput.value = "";
-        newsletterSuccess.textContent = "Thank you for subscribing!";
-      }, 1000);
+      // Makes post to the backend to subscribe the user
+      postBackend("/subscribe", { email: email })
+        .then((response) => {
+          newsletterSuccess.textContent = response.message;
+        })
+        .catch((error) => {
+          console.error("Error subscribing to newsletter:", error);
+          newsletterSuccess.textContent = "Subscription failed. Please try again.";
+        });
     });
   }
 }

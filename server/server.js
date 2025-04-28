@@ -1,20 +1,33 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('./generated/prisma/client');
 const Shopify = require('shopify-api-node');
 const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const prisma = new PrismaClient();
-const port = process.env.PORT || 3000;
+const port = 3000;
+
+// Conect to Prisma database
+prisma.$connect().catch((error) => {
+    console.error('Failed to connect to the database:', error);
+    process.exit(1);
+});
+console.log('Connected to Prisma database');
+
+// Check if required environment variables are set
+console.log('Environment Variables:', {
+    SHOPIFY_SHOP_NAME: process.env.SHOPIFY_SHOP_NAME,
+    SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
+    SHOPIFY_API_SECRET: process.env.SHOPIFY_API_SECRET,
+    SHOPIFY_ACCESS_TOKEN: process.env.SHOPIFY_ACCESS_TOKEN,
+    NODE_ENV: process.env.NODE_ENV,
+});
 
 // Initialize Shopify API client
 const shopify = new Shopify({
     shopName: process.env.SHOPIFY_SHOP_NAME,
-    apiKey: process.env.SHOPIFY_API_KEY,
-    password: process.env.SHOPIFY_API_SECRET,
     accessToken: process.env.SHOPIFY_ACCESS_TOKEN,
-    autoLimit: true, // Handle rate limiting automatically
     log: {
         // Enable logging in development
         log: process.env.NODE_ENV === 'development',
@@ -61,7 +74,7 @@ app.post('/subscribe', async (req, res) => {
     }
 
     try {
-        // await addToDatabase(email);
+        await addToDatabase(email);
         await addToShopify(email);
         res.status(201).json({ message: 'Thank you for subscribing!' });
     } catch (error) {
