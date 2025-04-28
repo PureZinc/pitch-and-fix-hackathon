@@ -35,6 +35,17 @@ const shopify = new Shopify({
     }
 });
 
+// Test Shopify connection
+shopify.shop.get()
+    .then((shop) => {
+        console.log('Connected to Shopify:', shop.name);
+    })
+    .catch((error) => {
+        console.error('Failed to connect to Shopify:', error);
+        process.exit(1);
+    });
+
+
 // Middleware
 app.use(cors());
 app.use(express.json());
