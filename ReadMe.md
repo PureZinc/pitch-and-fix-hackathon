@@ -46,9 +46,10 @@ The e-commerce website has several bugs and issues. Your task is to:
 2. Fix the issues while maintaining original functionality
 3. Create a brief report explaining your debugging process (This can just be some notes to yourself so you remember all the bugs you fixed for the video)
 
-  *If you are unsure if it is a bug - use your best judgement as to how you would want a site to work - but be ready to explain the reason any code in this repo is the way it is - there are some unique ways this code is written that may not be optimal* 
+   _If you are unsure if it is a bug - use your best judgement as to how you would want a site to work - but be ready to explain the reason any code in this repo is the way it is - there are some unique ways this code is written that may not be optimal_
 
 Types of bugs you might encounter:
+
 - CSS styling and layout issues
 - HTML structure problems
 - JavaScript functionality errors
@@ -66,8 +67,8 @@ After fixing the existing issues:
 
 1. Analyze the site to identify opportunities for improvement
    - look at feature-ideas.md for a short list of ideas - but you can implement anything you'd like
-3. Implement the feature
-4. Create a short demonstration of your solution
+2. Implement the feature
+3. Create a short demonstration of your solution
 
 ## Submission Requirements
 
@@ -75,23 +76,26 @@ Your final submission should include:
 
 1. Your GitHub repository link with the fixed and improved code
 2. A 5-minute video demonstration of your solution ( each team member must have a video about the feature they implemented)
-4. Team information (if applicable)
+3. Team information (if applicable)
 
 ## Evaluation Criteria
 
 Your submission will be evaluated based on:
 
 - **Bug Identification & Resolution**
+
   - Thoroughness in finding issues
   - Quality and cleanliness of fixes
   - Documentation of debugging process
 
 - **Feature Addition**
+
   - Relevance and value to the e-commerce site
   - Creativity and innovation
   - Quality of integration
 
 - **Implementation**
+
   - Technical quality of code
   - Adherence to best practices
   - Feature completeness and usability
@@ -110,6 +114,15 @@ Your submission will be evaluated based on:
 
 ## Questions?
 
-If you have any questions about the hackathon,  contact the mentor team.
+If you have any questions about the hackathon, contact the mentor team.
 
 Good luck and happy coding!
+
+# My Input to the Challenge >:)
+
+## Product Features
+
+- ZERO bugs. Everything has been debugged
+- Backend Server (Express + Prisma + Shopify) that handles products and analytics
+- Working newsletter system that successfully works alongside Shopify
+- Better design & more pages
