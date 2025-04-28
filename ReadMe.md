@@ -117,12 +117,3 @@ Your submission will be evaluated based on:
 If you have any questions about the hackathon, contact the mentor team.
 
 Good luck and happy coding!
-
-# My Input to the Challenge >:)
-
-## Product Features
-
-- ZERO bugs. Everything has been debugged
-- Backend Server (Express + Prisma + Shopify) that handles products and analytics
-- Working newsletter system that successfully works alongside Shopify
-- Better design & more pages
