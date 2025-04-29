@@ -1,5 +1,20 @@
-// Product handling and cart management
+// Utils
+const getProducts = async () => {
+  try {
+    const data = await getBackend("/products");
+    if (!data) {
+        console.error("No products found");
+        return [];
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
+  }
+}
 
+
+// Product handling and cart management
 document.addEventListener("DOMContentLoaded", function () {
     renderProducts();
     renderEventListeners();
@@ -12,44 +27,78 @@ function renderProducts() {
     const recentlyViewedGrid = document.querySelector(".recently-viewed-grid");
 
     // Render subcomponents
-    const productRating = (product) => `
+    const productRating = (product) => product.rating ? `
         <div class="product-rating">
             ${Array.from({ length: 5 }, (_, i) => i < Math.floor(product.rating) ? '<i class="fas fa-star"></i>' : (i < product.rating ? '<i class="fas fa-star-half-alt"></i>' : '<i class="far fa-star"></i>')).join('')}
             <span class="rating-count">(${product.ratingCount})</span>
         </div>
-    `
+    ` : "";
 
-    const productTag = (product) => product.tag ? `<div class="product-tag">${product.tag}</div>` : '';
+    const productTag = (product) => {
+        const firstTag = product.tags ? product.tags.split(',')[0] : null;
+        return firstTag ? `<div class="product-tag">${firstTag}</div>` : ''
+    };
 
     const productPrice = (product) => `
         <div class="product-price">
             ${product.originalPrice ? `<span class="original-price">$${product.originalPrice}</span>` : ''}
-            <span class="current-price">$${product.price}</span>
+            <span class="current-price">$${product.variants[0].price}</span>
         </div>
     `
 
     const productCard = (product) => `
         <div class="product-card">
             <div class="product-image">
-                <img src="${product.image || 'images/placeholder.jpg'}" alt="${product.name}">
+                <img src="${product.image || 'images/placeholder.jpg'}" alt="${product.title}">
                 ${productTag(product)}
             </div>
             <div class="product-details">
-                <h3 class="product-title">${product.name}</h3>
+                <h3 class="product-title">${product.title}</h3>
                 ${productPrice(product)}
                 ${productRating(product)}
-                <button class="add-to-cart-btn" data-product-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.price}">Add to Cart</button>
+                <button class="add-to-cart-btn" data-product-id="${product.id}" data-product-name="${product.title}" data-product-price="${product.variants[0].price}">Add to Cart</button>
             </div>
         </div>
     `
 
-    // Render products
-    if (productGrid) productGrid.innerHTML = products.map(product => productCard(product)).join('');
-    if (featuredProductGrid) featuredProductGrid.innerHTML = products.filter(product => product.featured).map(product => productCard(product)).join('');
-    if (recentlyViewedGrid) {
-        const recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
-        recentlyViewedGrid.innerHTML = recentlyViewed.map(product => productCard(product)).join('');
+    const cardsSkeleton = (count) => {
+        return Array.from({ length: count }, () => `
+            <div class="product-card skeleton">
+                <div class="product-image skeleton"></div>
+                <div class="product-details">
+                    <h3 class="product-title skeleton"></h3>
+                    <div class="product-price skeleton"></div>
+                    <div class="product-rating skeleton"></div>
+                    <button class="add-to-cart-btn skeleton"></button>
+                </div>
+            </div>
+        `).join('');
     }
+
+    // Fetch products from backend
+    if (productGrid) productGrid.innerHTML = cardsSkeleton(4);
+    if (featuredProductGrid) featuredProductGrid.innerHTML = cardsSkeleton(4);
+
+    getProducts().then((products) => {
+        console.log(products);
+        if (products) {
+            // Render products
+            if (productGrid) productGrid.innerHTML = products.map(product => productCard(product)).join('');
+            if (featuredProductGrid) featuredProductGrid.innerHTML = products
+                .filter(product => {
+                    const productTags = product.tags.split(', ');
+                    return productTags.includes("featured");
+                })
+                .map(product => productCard(product)).join('');
+            if (recentlyViewedGrid) {
+                const recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+                recentlyViewedGrid.innerHTML = recentlyViewed.map(product => productCard(product)).join('');
+            };
+            renderEventListeners();
+        } else {
+            console.error("No products found");
+        }
+    });
 }
 
 

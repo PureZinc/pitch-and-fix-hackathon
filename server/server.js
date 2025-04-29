@@ -94,10 +94,18 @@ app.post('/subscribe', async (req, res) => {
     }
 });
 
-// Get all products from Shopify
+// Get all products from Shopify, along with filtering options
 app.get('/products', async (req, res) => {
+    const { title, vendor, product_type, limit, page } = req.query;
+    const options = {};
+    if (title) options.title = title;
+    if (vendor) options.vendor = vendor;
+    if (product_type) options.product_type = product_type;
+    if (limit) options.limit = parseInt(limit, 10);
+    if (page) options.page = parseInt(page, 10);
+
     try {
-        const products = await shopify.product.list();
+        const products = await shopify.product.list(options);
         res.json(products);
     } catch (error) {
         console.error(error);
