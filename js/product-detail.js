@@ -1,6 +1,8 @@
 // Product Detail Page Functionality
-
 document.addEventListener("DOMContentLoaded", function () {
+  // Render product details
+  renderProductDetails();
+
   // Initialize product detail functionality
   initializeProductDetail();
 
@@ -30,6 +32,87 @@ function setupThumbnailGallery() {
   const thumbnails = document.querySelectorAll(".thumbnail");
 
   thumbnails.forEach((thumbnail) => {});
+}
+
+// Setup Values
+function renderProductDetails() {
+  const productIdHash = window.location.hash;
+  const productId = productIdHash.substring(1);
+
+  getBackend(`/products/${productId}`).then((product) => {
+    if (product) {
+      mountComponents(product);
+    } else {
+      console.error("Product not found");
+    }
+  });
+    
+  const productDetail = {
+    id: 1,
+    name: "Wireless Headphones",
+    price: 99.99,
+    originalPrice: 120.0,
+    discount: 17,
+    description:
+      "Experience crystal clear sound with our premium wireless headphones. Featuring active noise cancellation, 30-hour battery life, and comfortable over-ear design for all-day listening.",
+    features: [
+      "Active noise cancellation",
+      "Bluetooth 5.0 connectivity",
+      "30-hour battery life",
+      "Comfortable memory foam ear cushions",
+      "Built-in microphone for calls",
+      "Quick charging (3 hours playback from 15 minutes charge)",
+    ],
+    colors: [
+      { name: "black", colorCode: "#000" },
+      { name: "white", colorCode: "#fff", border: "1px solid #ddd" },
+      { name: "blue", colorCode: "#0078d4" },
+    ],
+    stockStatus: "In Stock",
+    sku: "WH-100-BLK",
+    categories: [
+      { name: "Electronics", link: "categories.html#electronics" },
+      { name: "Audio", link: "categories.html#audio" },
+    ],
+    images: [
+      { src: "../images/product1.jpg", alt: "Wireless Headphones - Front" },
+      { src: "../images/product1-side.jpg", alt: "Wireless Headphones - Side" },
+      { src: "../images/product1-back.jpg", alt: "Wireless Headphones - Back" },
+      { src: "../images/product1-case.jpg", alt: "Wireless Headphones - Case" },
+    ],
+  };
+
+  const mountComponents = (productDetails) => {
+    const productImageComponent = (product) => `
+        <div class="main-image">
+            <img
+                id="main-product-img"
+                src="${product.image}"
+                alt="${product.title}"
+            />
+        </div>
+        `;
+    
+    const productRatingComponent = (product) => `
+        ${`<i class="fas fa-star"></i>`.repeat(4)}
+        ${`<i class="fas fa-star-half-alt"></i>`}
+        <span class="rating-count">(42 reviews)</span>
+      `;
+
+    const productImage = document.querySelector(".product-images");
+    productImage.innerHTML = productImageComponent(productDetails);
+
+    const productInfo = document.querySelector(".product-info");
+    productInfo.querySelector(".product-title").textContent = productDetails.title;
+    productInfo.querySelector(".product-price .sale-price").textContent = `$${productDetails.variants[0].price}`;
+    productInfo.querySelector(".product-description").innerHTML = productDetails.body_html;
+    productInfo.querySelector(".product-rating").innerHTML = productRatingComponent(productDetails);
+
+    const addToCartButton = productInfo.querySelector(".purchase-actions button");
+    addToCartButton.dataset.productId = productDetails.id;
+    addToCartButton.dataset.productName = productDetails.title;
+    addToCartButton.dataset.productPrice = productDetails.variants[0].price;
+  }
 }
 
 // Setup tab navigation
