@@ -103,8 +103,13 @@ function renderProductDetails() {
     productImage.innerHTML = productImageComponent(productDetails);
 
     const productInfo = document.querySelector(".product-info");
+
+    const productPrice = productInfo.querySelector(".product-price");
+
     productInfo.querySelector(".product-title").textContent = productDetails.title;
-    productInfo.querySelector(".product-price .sale-price").textContent = `$${productDetails.variants[0].price}`;
+
+    productPrice.querySelector(".sale-price").textContent = `$${productDetails.variants[0].price}`;
+
     productInfo.querySelector(".product-description").innerHTML = productDetails.body_html;
     productInfo.querySelector(".product-rating").innerHTML = productRatingComponent(productDetails);
 
