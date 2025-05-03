@@ -46,42 +46,7 @@ function renderProductDetails() {
       console.error("Product not found");
     }
   });
-    
-  const productDetail = {
-    id: 1,
-    name: "Wireless Headphones",
-    price: 99.99,
-    originalPrice: 120.0,
-    discount: 17,
-    description:
-      "Experience crystal clear sound with our premium wireless headphones. Featuring active noise cancellation, 30-hour battery life, and comfortable over-ear design for all-day listening.",
-    features: [
-      "Active noise cancellation",
-      "Bluetooth 5.0 connectivity",
-      "30-hour battery life",
-      "Comfortable memory foam ear cushions",
-      "Built-in microphone for calls",
-      "Quick charging (3 hours playback from 15 minutes charge)",
-    ],
-    colors: [
-      { name: "black", colorCode: "#000" },
-      { name: "white", colorCode: "#fff", border: "1px solid #ddd" },
-      { name: "blue", colorCode: "#0078d4" },
-    ],
-    stockStatus: "In Stock",
-    sku: "WH-100-BLK",
-    categories: [
-      { name: "Electronics", link: "categories.html#electronics" },
-      { name: "Audio", link: "categories.html#audio" },
-    ],
-    images: [
-      { src: "../images/product1.jpg", alt: "Wireless Headphones - Front" },
-      { src: "../images/product1-side.jpg", alt: "Wireless Headphones - Side" },
-      { src: "../images/product1-back.jpg", alt: "Wireless Headphones - Back" },
-      { src: "../images/product1-case.jpg", alt: "Wireless Headphones - Case" },
-    ],
-  };
-
+  
   const mountComponents = (productDetails) => {
     const productImageComponent = (product) => `
         <div class="main-image">
@@ -113,10 +78,7 @@ function renderProductDetails() {
     productInfo.querySelector(".product-description").innerHTML = productDetails.body_html;
     productInfo.querySelector(".product-rating").innerHTML = productRatingComponent(productDetails);
 
-    const addToCartButton = productInfo.querySelector(".purchase-actions button");
-    addToCartButton.dataset.productId = productDetails.id;
-    addToCartButton.dataset.productName = productDetails.title;
-    addToCartButton.dataset.productPrice = productDetails.variants[0].price;
+    setupPurchaseActions(productDetails);
   }
 }
 
@@ -250,5 +212,62 @@ function setupColorSelection() {
       // Add selected class to clicked option
       this.classList.add("selected");
     });
+  });
+}
+
+function setupPurchaseActions(product) {
+  const purchaseActions = document.getElementById("purchase-actions");
+
+  purchaseActions.innerHTML = `
+    <button
+      id="add-to-cart"
+      class="add-to-cart-btn"
+      data-product-id="${product.id}"
+      data-product-name="${product.title}"
+      data-product-price="${product.variants[0].price}"
+    >
+      Add to Cart
+    </button>
+    <button id="buy-now" class="buy-now-btn">Buy Now</button>
+    <button
+      id="add-to-wishlist"
+      class="wishlist-btn"
+      data-product-id="${product.id}"
+      data-product-name="${product.title}"
+      data-product-price="${product.variants[0].price}"
+    >
+      ${
+        isInWishlist(product.id)
+          ? `<i class="fas fa-heart"></i><span>Remove from Wishlist</span>`
+          : `<i class="far fa-heart"></i><span>Add to Wishlist</span>`
+      }
+    </button>
+  `
+
+  const addToCartButton = purchaseActions.querySelector("#add-to-cart");
+  const buyNowButton = purchaseActions.querySelector("#buy-now");
+  const addToWishlistButton = purchaseActions.querySelector("#add-to-wishlist");
+
+  addToCartButton.addEventListener("click", function () {
+    const productId = this.dataset.productId;
+    const productName = this.dataset.productName;
+    const productPrice = this.dataset.productPrice;
+
+    // Add to cart logic here
+    addToCart(productId, productName, productPrice);
+  });
+
+  addToWishlistButton.addEventListener("click", function () {
+    const productId = this.dataset.productId;
+    const productName = this.dataset.productName;
+    const productPrice = this.dataset.productPrice;
+
+    if (isInWishlist(productId)) {
+      removeFromWishlist(productId);
+      this.innerHTML = `<i class="far fa-heart"></i><span>Add to Wishlist</span>`;
+    } else {
+      addToWishlist({ id: productId, name: productName, price: productPrice });
+      this.innerHTML = `<i class="fas fa-heart"></i><span>Remove from Wishlist</span>`;
+    }
   });
 }

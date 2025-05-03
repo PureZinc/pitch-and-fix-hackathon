@@ -355,11 +355,10 @@ function setupCheckoutButton() {
   }
 }
 
-function checkoutItems() {
-  const checkoutBtn = document.getElementById("checkout-btn");
-
+function payCartItems(email) {
+  
   postBackend("/cart/pay", {
-    email: "",
+    email: email,
     lineItems: cart.map((item) => {
       return {
         id: item.id,

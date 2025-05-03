@@ -66,6 +66,7 @@
         </div>
         <div class="thumbnail-gallery">
           <!-- Intentional bug: onclick handlers using incorrect function names | FIXED -->
+           <!-- Now loads dynamically! -->
           <img
             src="../images/product1.jpg"
             alt="Wireless Headphones - Front"
@@ -99,9 +100,7 @@
           <span class="rating-count">(42 reviews)</span>
         </div>
         <div class="product-price">
-          <span class="original-price">$120.00</span>
           <span class="sale-price">$99.99</span>
-          <span class="discount-badge">Save 17%</span>
         </div>
         <div class="product-description">
           <p>
@@ -118,29 +117,6 @@
             <li>Quick charging (3 hours playback from 15 minutes charge)</li>
           </ul>
         </div>
-        <div class="product-variants">
-          <div class="color-options">
-            <h3>Color:</h3>
-            <div class="color-selector">
-              <!-- Intentional bug: using classes inconsistently | FIXED -->
-              <div
-                class="color-option selected"
-                data-color="black"
-                style="background-color: #000"
-              ></div>
-              <div
-                class="color-option"
-                data-color="white"
-                style="background-color: #fff; border: 1px solid #ddd"
-              ></div>
-              <div
-                class="color-option"
-                data-color="blue"
-                style="background-color: #0078d4"
-              ></div>
-            </div>
-          </div>
-        </div>
         <div class="quantity-selector">
           <h3>Quantity:</h3>
           <div class="quantity-controls">
@@ -150,22 +126,9 @@
             <button id="increase-quantity" class="quantity-btn">+</button>
           </div>
         </div>
-        <div class="purchase-actions">
+        <div class="purchase-actions" id="purchase-actions">
           <!-- Intentional bug: missing data-product-price attribute | FIXED -->
-          <button
-            id="add-to-cart"
-            class="add-to-cart-btn"
-            data-product-id="1"
-            data-product-name="Wireless Headphones"
-            data-product-price="99.99"
-          >
-            Add to Cart
-          </button>
-          <button id="buy-now" class="buy-now-btn">Buy Now</button>
-          <button id="add-to-wishlist" class="wishlist-btn">
-            <i class="far fa-heart"></i>
-            <span>Add to Wishlist</span>
-          </button>
+           <!-- Now loads dynamically! -->
         </div>
         <div class="product-meta">
           <p class="stock-status in-stock">In Stock</p>
@@ -178,7 +141,7 @@
       </div>
     </main>
 
-    <section class="product-tabs">
+    <section class="product-tabs" id="product-tabs">
       <div class="tabs-header">
         <!-- Intentional bug: missing data-tab attribute on one tab | FIXED -->
         <button class="tab-btn active" data-tab="description">
@@ -566,7 +529,7 @@
     <!-- Intentional bug: loading scripts in incorrect order | FIXED -->
     <script src="../js/main.js"></script>
     <script src="../js/cart.js"></script>
+    <script src="../js/wishlist.js"></script>
     <script src="../js/product-detail.js"></script>
-    <!-- <script src="../js/products.js"></script> -->
   </body>
 </html>
