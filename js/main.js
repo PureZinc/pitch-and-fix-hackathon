@@ -1,36 +1,4 @@
 // Main JavaScript for ShopEase
-const categories = [
-  {
-    id: 1,
-    name: "Electronics",
-    image: "images/category1.jpg",
-    description: "Explore the latest in electronics",
-    link: "/pages/categories.html#electronics"
-  },
-  {
-    id: 2,
-    name: "Clothing",
-    image: "images/category2.jpg",
-    description: "Discover trendy clothing options",
-    link: "/pages/categories.html#clothing"
-  },
-  {
-    id: 3,
-    name: "Home & Kitchen",
-    image: "images/category3.jpg",
-    description: "Upgrade your home and kitchen essentials",
-    link: "/pages/categories.html#home"
-  },
-  {
-    id: 4,
-    name: "Sports & Outdoors",
-    image: "images/category4.jpg",
-    description: "Gear up for sports and outdoor adventures",
-    link: "/pages/categories.html#sports"
-  }
-];
-
-
 const backendURL = "http://localhost:3000";
 
 
