@@ -94,6 +94,41 @@ app.post('/subscribe', async (req, res) => {
     }
 });
 
+app.post('/unsubscribe', async (req, res) => {
+    const { email } = req.body;
+
+    const removeFromDatabase = async (email) => {
+        const existingSubscriber = await prisma.subscriber.findUnique({
+            where: { email },
+        });
+
+        if (!existingSubscriber) {
+            return res.status(400).json({ message: 'Email not found' });
+        }
+
+        // Remove subscriber from the database
+        await prisma.subscriber.delete({
+            where: { email },
+        });
+    }
+
+    const removeFromShopify = async (email) => {
+        const customers = await shopify.customer.list({ email });
+        if (customers.length > 0) {
+            await shopify.customer.delete(customers[0].id);
+        }
+    }
+
+    try {
+        removeFromDatabase(email);
+        removeFromShopify(email);
+        res.status(200).json({ message: 'Successfully unsubscribed' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 // Get all products from Shopify, along with filtering options
 app.get('/products', async (req, res) => {
     const { title, vendor, product_type, limit, page } = req.query;
@@ -126,6 +161,7 @@ app.get('/products/:id', async (req, res) => {
     }
 });
 
+
 // Add a product to the cart (mock implementation)
 app.post('/cart/add', (req, res) => {
     const { productId, quantity } = req.body;
@@ -154,6 +190,35 @@ app.post('/cart/remove', (req, res) => {
 
     req.session.cart = updatedCart;
     res.json(updatedCart);
+});
+
+// Pay for the Shopify cart
+app.post('/cart/pay', async (req, res) => {
+    const { email, lineItems } = req.body;
+
+    if (!email || !lineItems || !Array.isArray(lineItems) || lineItems.length === 0) {
+        return res.status(400).json({ message: 'Invalid request payload' });
+    }
+
+    try {
+        // Create a draft order in Shopify
+        const draftOrder = await shopify.draftOrder.create({
+            email,
+            line_items: lineItems,
+            use_customer_default_address: true,
+        });
+
+        // Complete the draft order to process payment
+        const completedOrder = await shopify.draftOrder.complete(draftOrder.id);
+
+        res.status(201).json({
+            message: 'Payment successful',
+            order: completedOrder,
+        });
+    } catch (error) {
+        console.error('Error processing payment:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
 

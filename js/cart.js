@@ -350,11 +350,36 @@ function setupCheckoutButton() {
 
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", function () {
-      // Redirect to checkout page (or show modal)
-      alert("Proceeding to checkout...");
-      // window.location.href = 'checkout.html';
+      window.location.href = '/pages/checkout.html';
     });
   }
+}
+
+function checkoutItems() {
+  const checkoutBtn = document.getElementById("checkout-btn");
+
+  postBackend("/cart/pay", {
+    email: "",
+    lineItems: cart.map((item) => {
+      return {
+        id: item.id,
+        name: item.title,
+        quantity: item.quantity || 1,
+        price: item.price * 100
+      };
+    }),
+  })
+  .then((response) => {
+    if (response.status === 200) {
+      window.location.href = "/pages/success.html";
+    } else {
+      alert("Checkout failed. Please try again.");
+    }
+  })
+  .catch((error) => {
+    console.error("Error during checkout:", error);
+    alert("An error occurred. Please try again.");
+  });
 }
 
 // Initialize cart functionality
