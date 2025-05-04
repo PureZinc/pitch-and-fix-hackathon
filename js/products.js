@@ -29,6 +29,7 @@ function renderProducts() {
     const featuredProductGrid = document.querySelector(".featured-product-grid");
     const recentlyViewedGrid = document.querySelector(".recently-viewed-grid");
     const relatedProductsGrid = document.querySelector(".related-product-grid");
+    const wishListProductsGrid = document.querySelector(".wishlist-product-grid");
 
     // Render subcomponents
     const productQuantity = (product) => product.variants[0].inventory_quantity ? `
@@ -94,6 +95,7 @@ function renderProducts() {
     if (productGrid) productGrid.innerHTML = cardsSkeleton(4);
     if (featuredProductGrid) featuredProductGrid.innerHTML = cardsSkeleton(4);
     if (relatedProductsGrid) relatedProductsGrid.innerHTML = cardsSkeleton(4);
+    if (wishListProductsGrid) wishListProductsGrid.innerHTML = cardsSkeleton(4);
 
     getProducts().then((products) => {
         if (products) {
@@ -128,6 +130,11 @@ function renderProducts() {
                         relatedProductsGrid.innerHTML = relatedProducts.map(product => productCard(product)).join('');
                     });
                 });
+            }
+
+            if (wishListProductsGrid) {
+                const wishListProducts = products.filter(product => isInWishlist(product.id));
+                wishListProductsGrid.innerHTML = wishListProducts.map(product => productCard(product)).join('');
             }
 
             renderEventListeners();

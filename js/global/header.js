@@ -6,7 +6,7 @@ function mountHeader() {
     const navLinks = [
         { name: 'Home', href: '/' },
         { name: 'Products', href: '/pages/products.html' },
-        { name: 'Categories', href: '/pages/categories.html' },
+        { name: 'Wishlist', href: '/pages/wishlist.html' },
         { name: 'Blog', href: '/pages/blog.html' },
         { name: 'Contact', href: '/pages/contact.html' }
     ]

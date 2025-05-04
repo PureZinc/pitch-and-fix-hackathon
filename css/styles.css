@@ -238,7 +238,7 @@ header {
 .related-product-grid,
 .featured-product-grid,
 .recently-viewed-grid,
-.category-grid {
+.wishlist-product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
