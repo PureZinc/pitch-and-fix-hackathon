@@ -237,14 +237,6 @@
     margin-bottom: 0.5rem;
 }
 
-.stock-status.in-stock {
-    color: #4CAF50;
-}
-
-.stock-status.out-of-stock {
-    color: #f44336;
-}
-
 .categories a {
     color: var(--primary-color);
     text-decoration: none;

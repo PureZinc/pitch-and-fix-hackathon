@@ -282,6 +282,7 @@ header {
   color: white;
   font-size: 0.8rem;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 .product-details {
@@ -354,6 +355,14 @@ header {
 }
 .add-to-cart-message.show {
   display: flex;
+}
+
+.stock-status.in-stock {
+  color: #4CAF50;
+}
+
+.stock-status.out-of-stock {
+  color: #f44336;
 }
 
 /* Categories */

@@ -58,7 +58,7 @@ function renderProducts() {
     `
 
     const productCard = (product) => `
-        <div class="product-card">
+        <div class="product-card" data-product-id="${product.id}">
             <div class="product-image">
                 <img src="${product.image ? product.image.src : '../images/placeholder.jpg'}" alt="${product.title}">
                 ${productTag(product)}
@@ -98,7 +98,16 @@ function renderProducts() {
     getProducts().then((products) => {
         if (products) {
             // Render products
-            if (productGrid) productGrid.innerHTML = products.map(product => productCard(product)).join('');
+            if (productGrid) productGrid.innerHTML = products
+                .filter(product => {
+                    const tagFilter = window.location.hash.substring(1);
+                    if (tagFilter) {
+                        const productTags = product.tags.split(', ').map(tag => tag.trim().toLowerCase());
+                        return productTags.includes(tagFilter);
+                    }
+                    return true;
+                })
+                .map(product => productCard(product)).join('');
 
             if (featuredProductGrid) featuredProductGrid.innerHTML = products
                 .filter(product => {
@@ -151,8 +160,16 @@ function renderEventListeners() {
                 return;
             };
 
+            // if product tag is clicked, do not redirect
+            if (event.target.classList.contains("product-tag")) {
+                const tag = event.target.innerText.toLowerCase();
+                window.location.hash = tag;
+                window.location.reload();
+                return;
+            };
+
             // Link to product detail page
-            const productId = this.querySelector(".add-to-cart-btn").getAttribute("data-product-id");
+            const productId = this.getAttribute("data-product-id");
 
             // Add to recently viewed products
             getProductId(productId)
@@ -166,5 +183,10 @@ function renderEventListeners() {
                 })
                 .catch(error => console.error("Error fetching product:", error));
         });
+    });
+
+    const allProductsButton = document.getElementById('all-products-button');
+    allProductsButton.addEventListener('click', function () {
+        window.location.href = '/pages/products.html';
     });
 }

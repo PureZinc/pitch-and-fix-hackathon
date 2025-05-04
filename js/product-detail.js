@@ -233,7 +233,7 @@ function setupProductMeta(product) {
     <p class="stock-status ${stockClass}">${stockStatus}</p>
     <p class="sku">SKU: ${SKU}</p>
     <p class="categories">
-      Categories: ${categories.map(cat => cat !== 'featured' ? `<a href="categories.html#${cat.toLowerCase()}">${cat}</a>` : '').join('')}
+      Categories: ${categories.map(cat => cat !== 'featured' ? `<a href="/pages/products.html#${cat.toLowerCase()}">${cat}</a>` : '').join('')}
     </p>
   `;
 }
