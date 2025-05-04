@@ -13,6 +13,37 @@ const getProducts = async () => {
   }
 }
 
+const getProductId = async (id) => {
+  try {
+    const data = await getBackend(`/products/${id}`);
+    if (!data) {
+        console.error("No product found with ID:", id);
+        return null;
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+}
+
+const findRelatedProducts = async (product) => {
+  try {
+    const products = await getProducts();
+    if (!products) {
+        console.error("No products found for related products search");
+        return [];
+    }
+    const relatedProducts = products.filter(
+        p => p.id !== product.id
+        && p.tags.split(', ').some(tag => product.tags.split(', ').includes(tag))
+    );
+    return relatedProducts.slice(0, 4);
+  } catch (error) {
+    console.error("Error fetching related products:", error);
+    return [];
+  }
+}
 
 // Product handling and cart management
 document.addEventListener("DOMContentLoaded", function () {
@@ -25,6 +56,7 @@ function renderProducts() {
     const productGrid = document.querySelector(".product-grid");
     const featuredProductGrid = document.querySelector(".featured-product-grid");
     const recentlyViewedGrid = document.querySelector(".recently-viewed-grid");
+    const relatedProductsGrid = document.querySelector(".related-product-grid");
 
     // Render subcomponents
     const productRating = (product) => product.rating ? `
@@ -78,22 +110,34 @@ function renderProducts() {
     // Fetch products from backend
     if (productGrid) productGrid.innerHTML = cardsSkeleton(4);
     if (featuredProductGrid) featuredProductGrid.innerHTML = cardsSkeleton(4);
+    if (relatedProductsGrid) relatedProductsGrid.innerHTML = cardsSkeleton(4);
 
     getProducts().then((products) => {
-        console.log(products);
         if (products) {
             // Render products
             if (productGrid) productGrid.innerHTML = products.map(product => productCard(product)).join('');
+
             if (featuredProductGrid) featuredProductGrid.innerHTML = products
                 .filter(product => {
                     const productTags = product.tags.split(', ');
                     return productTags.includes("featured");
                 })
                 .map(product => productCard(product)).join('');
+            
             if (recentlyViewedGrid) {
                 const recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
                 recentlyViewedGrid.innerHTML = recentlyViewed.map(product => productCard(product)).join('');
             };
+
+            if (relatedProductsGrid) {
+                const productId = window.location.hash.substring(1);
+                getProductId(productId).then(product => {
+                    findRelatedProducts(product).then(relatedProducts => {
+                        relatedProductsGrid.innerHTML = relatedProducts.map(product => productCard(product)).join('');
+                    });
+                });
+            }
+
             renderEventListeners();
         } else {
             console.error("No products found");
@@ -128,14 +172,18 @@ function renderEventListeners() {
 
             // Link to product detail page
             const productId = this.querySelector(".add-to-cart-btn").getAttribute("data-product-id");
-            window.location.href = `/pages/product-detail.html#${productId}`;
-            
 
             // Add to recently viewed products
-            const product = products.find(p => p.id == productId);
-            if (product) {
-                addToRecentlyViewed(product);
-            }
+            getProductId(productId)
+                .then(product => {
+                    if (product) {
+                        addToRecentlyViewed(product);
+                    } else {
+                        console.error("Product not found:", productId);
+                    }
+                    window.location.href = `/pages/product-detail.html#${productId}`;
+                })
+                .catch(error => console.error("Error fetching product:", error));
         });
     });
 }

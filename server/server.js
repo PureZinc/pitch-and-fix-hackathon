@@ -161,6 +161,28 @@ app.get('/products/:id', async (req, res) => {
     }
 });
 
+app.get('/blogs', async (req, res) => {
+    try {
+        const blogs = await shopify.blog.list();
+        res.json(blogs);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+app.get('/blogs/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const blog = await shopify.blog.get(id);
+        res.json(blog);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 // Add a product to the cart (mock implementation)
 app.post('/cart/add', (req, res) => {
