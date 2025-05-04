@@ -30,6 +30,7 @@ function renderProducts() {
     const recentlyViewedGrid = document.querySelector(".recently-viewed-grid");
     const relatedProductsGrid = document.querySelector(".related-product-grid");
     const wishListProductsGrid = document.querySelector(".wishlist-product-grid");
+    const cartProductGrid = document.querySelector(".cart-product-grid")
 
     // Render subcomponents
     const productQuantity = (product) => product.variants[0].inventory_quantity ? `
@@ -137,6 +138,13 @@ function renderProducts() {
                 wishListProductsGrid.innerHTML = wishListProducts.map(product => productCard(product)).join('');
             }
 
+            if (cartProductGrid) {
+                console.log(cart, products);
+                const cartProducts = products.filter(product => cart.some(item => parseInt(item.id) === product.id));
+                console.log(cartProducts);
+                cartProductGrid.innerHTML = cartProducts.map(product => productCard(product)).join('');
+            }
+
             renderEventListeners();
         } else {
             console.error("No products found");
@@ -193,7 +201,7 @@ function renderEventListeners() {
     });
 
     const allProductsButton = document.getElementById('all-products-button');
-    allProductsButton.addEventListener('click', function () {
+    if (allProductsButton) allProductsButton.addEventListener('click', function () {
         window.location.href = '/pages/products.html';
     });
 }

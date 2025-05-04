@@ -355,17 +355,8 @@ function setupPromoCode() {
   }
 }
 
-// Setup checkout button
-function setupCheckoutButton() {
-  const checkoutBtn = document.getElementById("checkout-btn");
 
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", function () {
-      window.location.href = '/pages/checkout.html';
-    });
-  }
-}
-
+// Pay items in Cart
 function payCartItems(email) {
   
   postBackend("/cart/pay", {

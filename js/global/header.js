@@ -34,7 +34,7 @@ function mountHeader() {
                 <div class="cart-total">
                     <p>Total: $<span id="cart-total-amount">0.00</span></p>
                 </div>
-                <button class="checkout-btn">Checkout</button>
+                <a href="/pages/checkout.html"><button id="checkout-btn" class="checkout-btn">Checkout</button></a>
             </div>
         </div>
     `;
