@@ -17,35 +17,44 @@ function saveCart() {
 }
 
 // Add product to cart
-function addToCart(productId, productName, productPrice) {
-  const price = productPrice;
+function addToCart(productId, productQuantity) {
+  const quantity = productQuantity || 1;
 
-  // Check if product already in cart
-  const existingItem = cart.find((item) => item.id === productId);
+  getProductId(productId).then((product) => {
+    if (product) {
+      const productName = product.title;
+      const productImage = product.images[0].src || null;
+      const productPrice = product.variants[0].price || 0.0;
 
-  if (existingItem) {
-    // Increase quantity if already in cart
-    existingItem.quantity += 1;
-  } else {
-    // Add new item to cart
-    cart.push({
-      id: productId,
-      name: productName,
-      price: price,
-      quantity: 1,
-      total: price,
-    });
-  }
+      // Check if product is already in cart
+      const existingItem = cart.find((item) => item.id === productId);
 
-  // Save cart and update UI
-  saveCart();
-  updateCartCount();
+      if (existingItem) {
+        // Increase quantity if already in cart
+        existingItem.quantity += 1;
+      } else {
+        // Add new item to cart
+        cart.push({
+          id: productId,
+          name: productName,
+          price: productPrice,
+          quantity: quantity,
+          total: productPrice * quantity + 0.01,
+          imageSrc: productImage,
+        });
+      }
 
-  // If on cart page, update cart display
-  if (document.querySelector(".cart-items-list")) {
-    displayCartItems();
-    updateCartTotals();
-  }
+      // Save cart and update UI
+      saveCart();
+      updateCartCount();
+
+      // If on cart page, update cart display
+      if (document.querySelector(".cart-items-list")) {
+        displayCartItems();
+        updateCartTotals();
+      }
+    }
+  });
 }
 
 // Remove item from cart
@@ -145,7 +154,9 @@ function displayCartDropdown() {
       cartItem.innerHTML = `
                 <div class="item-details">
                     <h4>${item.name}</h4>
-                    <p>${item.price}</p>
+                    <p>$${item.price}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                    <img src="${item.imageSrc}" alt="${item.name}" class="cart-item-image">
                 </div>
                 <button class="remove-item" data-product-id="${item.id}">×</button>
             `;

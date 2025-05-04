@@ -11,6 +11,21 @@ body {
   color: #333;
 }
 
+:root {
+  --primary-color: #3a6ea5;
+  --primary-hover: #2c5282;
+  --secondary-color: #ff6b6b;
+  --light-gray: #f7f7f7;
+  --medium-gray: #e0e0e0;
+  --dark-gray: #555;
+  --text-color: #333;
+  --text-light: #777;
+  --white: #fff;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --border-radius: 8px;
+}
+
 /* Typography */
 h1,
 h2,

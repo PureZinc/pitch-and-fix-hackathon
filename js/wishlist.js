@@ -16,15 +16,15 @@ function saveWishList() {
     localStorage.setItem('wishlist', JSON.stringify(wishList));
 }
 
-function addToWishlist(product) {
-    if (!wishList.some(item => item.id === product.id)) {
-        wishList.push(product);
+function addToWishlist(productId) {
+    if (!wishList.some(itemId => itemId === productId)) {
+        wishList.push(productId);
         saveWishList();
     }
 }
 
 function removeFromWishlist(productId) {
-    wishList = wishList.filter(item => item.id !== productId);
+    wishList = wishList.filter(item => item !== productId);
     saveWishList();
 } 
 
@@ -34,7 +34,7 @@ function clearWishlist() {
 }
 
 function isInWishlist(productId) {
-    return wishList.some(item => item.id === productId);
+    return wishList.some(item => item === productId);
 }
 
 

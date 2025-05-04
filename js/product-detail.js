@@ -12,9 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Setup quantity controls
   setupQuantityControls();
 
-  // Setup add to cart button
-  setupAddToCart();
-
   // Setup color selection
   setupColorSelection();
 });
@@ -52,7 +49,7 @@ function renderProductDetails() {
         <div class="main-image">
             <img
                 id="main-product-img"
-                src="${product.image}"
+                src="${product.image ? product.image.src : ''}"
                 alt="${product.title}"
             />
         </div>
@@ -133,32 +130,6 @@ function setupQuantityControls() {
       if (this.value < 1) {
         this.value = 1;
       }
-    });
-  }
-}
-
-// Setup add to cart button
-function setupAddToCart() {
-  const addToCartBtn = document.getElementById("add-to-cart");
-
-  if (addToCartBtn) {
-    addToCartBtn.addEventListener("click", function () {
-      // Get product details
-      const productId = this.dataset.productId;
-      const productName = this.dataset.productName;
-      const productPrice = this.dataset.productPrice;
-
-      // Get selected color
-      const selectedColor = getSelectedColor();
-
-      // Get quantity
-      const quantity = parseInt(document.getElementById("quantity").value);
-
-      // Add to cart
-      addToCart(productId, productName, productPrice);
-
-      // Show success message
-      showAddToCartMessage();
     });
   }
 }
@@ -250,11 +221,11 @@ function setupPurchaseActions(product) {
 
   addToCartButton.addEventListener("click", function () {
     const productId = this.dataset.productId;
-    const productName = this.dataset.productName;
-    const productPrice = this.dataset.productPrice;
+    const quantity = parseInt(document.getElementById("quantity").value);
 
     // Add to cart logic here
-    addToCart(productId, productName, productPrice);
+    addToCart(productId, quantity);
+    showAddToCartMessage();
   });
 
   addToWishlistButton.addEventListener("click", function () {

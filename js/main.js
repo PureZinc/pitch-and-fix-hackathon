@@ -38,6 +38,35 @@ async function postBackend(url, data) {
     });
 }
 
+// Fetching products from the backend
+const getProducts = async () => {
+  try {
+    const data = await getBackend("/products");
+    if (!data) {
+        console.error("No products found");
+        return [];
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return [];
+  }
+}
+
+const getProductId = async (id) => {
+  try {
+    const data = await getBackend(`/products/${id}`);
+    if (!data) {
+        console.error("No product found with ID:", id);
+        return null;
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+}
+
 
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {

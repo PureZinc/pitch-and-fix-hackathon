@@ -1,32 +1,4 @@
 // Utils
-const getProducts = async () => {
-  try {
-    const data = await getBackend("/products");
-    if (!data) {
-        console.error("No products found");
-        return [];
-    }
-    return data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return [];
-  }
-}
-
-const getProductId = async (id) => {
-  try {
-    const data = await getBackend(`/products/${id}`);
-    if (!data) {
-        console.error("No product found with ID:", id);
-        return null;
-    }
-    return data;
-  } catch (error) {
-    console.error("Error fetching product:", error);
-    return null;
-  }
-}
-
 const findRelatedProducts = async (product) => {
   try {
     const products = await getProducts();
@@ -81,7 +53,7 @@ function renderProducts() {
     const productCard = (product) => `
         <div class="product-card">
             <div class="product-image">
-                <img src="${product.image || 'images/placeholder.jpg'}" alt="${product.title}">
+                <img src="${product.image ? product.image.src : '../images/placeholder.jpg'}" alt="${product.title}">
                 ${productTag(product)}
             </div>
             <div class="product-details">
