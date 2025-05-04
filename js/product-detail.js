@@ -8,12 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Setup tab navigation
   setupTabNavigation();
-
-  // Setup quantity controls
-  setupQuantityControls();
-
-  // Setup color selection
-  setupColorSelection();
 });
 
 // Initialize product detail functionality
@@ -32,12 +26,14 @@ function setupThumbnailGallery() {
 }
 
 // Setup Values
+let productStock = 0  // Initialize product stock
 function renderProductDetails() {
   const productIdHash = window.location.hash;
   const productId = productIdHash.substring(1);
 
   getBackend(`/products/${productId}`).then((product) => {
     if (product) {
+      productStock = product.variants[0].inventory_quantity;
       mountComponents(product);
     } else {
       console.error("Product not found");
@@ -76,6 +72,8 @@ function renderProductDetails() {
     productInfo.querySelector(".product-rating").innerHTML = productRatingComponent(productDetails);
 
     setupPurchaseActions(productDetails);
+    setupProductMeta(productDetails);
+    setupQuantityControls();
   }
 }
 
@@ -108,6 +106,8 @@ function setupQuantityControls() {
   const increaseBtn = document.getElementById("increase-quantity");
   const quantityInput = document.getElementById("quantity");
 
+  const stock = productStock;
+
   if (decreaseBtn && quantityInput) {
     decreaseBtn.addEventListener("click", function () {
       let currentValue = parseInt(quantityInput.value);
@@ -120,7 +120,9 @@ function setupQuantityControls() {
   if (increaseBtn && quantityInput) {
     increaseBtn.addEventListener("click", function () {
       let currentValue = parseInt(quantityInput.value);
-      quantityInput.value = currentValue + 1;
+      if (currentValue < productStock) {
+        quantityInput.value = currentValue + 1;
+      }
     });
   }
 
@@ -130,19 +132,13 @@ function setupQuantityControls() {
       if (this.value < 1) {
         this.value = 1;
       }
+
+      // Ensure value is not greater than stock
+      if (this.value > stock) {
+        this.value = stock;
+      }
     });
   }
-}
-
-// Get selected color
-function getSelectedColor() {
-  const selectedColorElement = document.querySelector(".color-option.selected");
-
-  if (selectedColorElement) {
-    return selectedColorElement.dataset.color;
-  }
-
-  return null;
 }
 
 // Show add to cart success message
@@ -171,31 +167,14 @@ function showAddToCartMessage() {
   });
 }
 
-// Setup color selection
-function setupColorSelection() {
-  const colorOptions = document.querySelectorAll(".color-option");
-
-  colorOptions.forEach((option) => {
-    option.addEventListener("click", function () {
-      // Remove selected class from all options
-      colorOptions.forEach((opt) => opt.classList.remove("selected"));
-
-      // Add selected class to clicked option
-      this.classList.add("selected");
-    });
-  });
-}
-
 function setupPurchaseActions(product) {
   const purchaseActions = document.getElementById("purchase-actions");
 
-  purchaseActions.innerHTML = `
+  purchaseActions.innerHTML = productStock > 0 ? `
     <button
       id="add-to-cart"
       class="add-to-cart-btn"
       data-product-id="${product.id}"
-      data-product-name="${product.title}"
-      data-product-price="${product.variants[0].price}"
     >
       Add to Cart
     </button>
@@ -204,8 +183,6 @@ function setupPurchaseActions(product) {
       id="add-to-wishlist"
       class="wishlist-btn"
       data-product-id="${product.id}"
-      data-product-name="${product.title}"
-      data-product-price="${product.variants[0].price}"
     >
       ${
         isInWishlist(product.id)
@@ -213,7 +190,7 @@ function setupPurchaseActions(product) {
           : `<i class="far fa-heart"></i><span>Add to Wishlist</span>`
       }
     </button>
-  `
+  ` : ''
 
   const addToCartButton = purchaseActions.querySelector("#add-to-cart");
   const buyNowButton = purchaseActions.querySelector("#buy-now");
@@ -230,15 +207,33 @@ function setupPurchaseActions(product) {
 
   addToWishlistButton.addEventListener("click", function () {
     const productId = this.dataset.productId;
-    const productName = this.dataset.productName;
-    const productPrice = this.dataset.productPrice;
 
     if (isInWishlist(productId)) {
       removeFromWishlist(productId);
       this.innerHTML = `<i class="far fa-heart"></i><span>Add to Wishlist</span>`;
     } else {
-      addToWishlist({ id: productId, name: productName, price: productPrice });
+      addToWishlist(productId);
       this.innerHTML = `<i class="fas fa-heart"></i><span>Remove from Wishlist</span>`;
     }
   });
+}
+
+function setupProductMeta(product) {
+  const productMeta = document.querySelector(".product-meta");
+
+  const stock = productStock;
+  const SKU = product.variants[0].sku || "WH-100-BLK";
+  const tags = product.tags || "Audio, Headphones";
+  const categories = tags.split(", ");
+
+  const stockStatus = stock > 0 ? `<strong>${stock}</strong> In Stock` : "Out of Stock";
+  const stockClass = stock > 0 ? "in-stock" : "out-of-stock";
+
+  productMeta.innerHTML = `
+    <p class="stock-status ${stockClass}">${stockStatus}</p>
+    <p class="sku">SKU: ${SKU}</p>
+    <p class="categories">
+      Categories: ${categories.map(cat => cat !== 'featured' ? `<a href="categories.html#${cat.toLowerCase()}">${cat}</a>` : '').join('')}
+    </p>
+  `;
 }

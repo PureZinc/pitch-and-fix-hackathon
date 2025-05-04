@@ -31,6 +31,13 @@ function renderProducts() {
     const relatedProductsGrid = document.querySelector(".related-product-grid");
 
     // Render subcomponents
+    const productQuantity = (product) => product.variants[0].inventory_quantity ? `
+        <div class="stock-status in-stock">
+            <span class="quantity-label">Quantity:</span>
+            <span class="quantity-value">${product.variants[0].inventory_quantity}</span>
+        </div>
+    ` : '<div class="stock-status out-of-stock">Out of Stock</div>';
+
     const productRating = (product) => product.rating ? `
         <div class="product-rating">
             ${Array.from({ length: 5 }, (_, i) => i < Math.floor(product.rating) ? '<i class="fas fa-star"></i>' : (i < product.rating ? '<i class="fas fa-star-half-alt"></i>' : '<i class="far fa-star"></i>')).join('')}
@@ -60,7 +67,11 @@ function renderProducts() {
                 <h3 class="product-title">${product.title}</h3>
                 ${productPrice(product)}
                 ${productRating(product)}
-                <button class="add-to-cart-btn" data-product-id="${product.id}" data-product-name="${product.title}" data-product-price="${product.variants[0].price}">Add to Cart</button>
+                ${productQuantity(product)}
+                ${product.variants[0].inventory_quantity
+                    ? `<button class="add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>`
+                    : ''
+                }
             </div>
         </div>
     `
@@ -136,9 +147,7 @@ function renderEventListeners() {
                 // Instead, add to cart and return
                 const product = this.querySelector(".add-to-cart-btn");
                 const productId = product.getAttribute("data-product-id");
-                const productName = product.getAttribute("data-product-name");
-                const productPrice = parseFloat(product.getAttribute("data-product-price"));
-                addToCart(productId, productName, productPrice);
+                addToCart(productId, 1);
                 return;
             };
 

@@ -24,7 +24,7 @@ function addToWishlist(productId) {
 }
 
 function removeFromWishlist(productId) {
-    wishList = wishList.filter(item => item !== productId);
+    wishList = wishList.filter(itemId => itemId !== productId);
     saveWishList();
 } 
 
@@ -34,7 +34,7 @@ function clearWishlist() {
 }
 
 function isInWishlist(productId) {
-    return wishList.some(item => item === productId);
+    return wishList.some(itemId => itemId === productId);
 }
 
 

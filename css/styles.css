@@ -340,6 +340,22 @@ header {
   background-color: #005a9e;
 }
 
+.add-to-cart-message {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.0);
+  color: black;
+  align-items: center;
+  justify-content: center;
+}
+.add-to-cart-message.show {
+  display: flex;
+}
+
 /* Categories */
 .category-card {
   position: relative;
