@@ -4,11 +4,14 @@ import App from './App.tsx'
 
 // Import services
 import { CartProvider } from './services/cartService.tsx';
+import { WishlistProvider } from './services/wishlistService.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <CartProvider>
-      <App />
+      <WishlistProvider>
+        <App />
+      </WishlistProvider>
     </CartProvider>
   </StrictMode>,
 )

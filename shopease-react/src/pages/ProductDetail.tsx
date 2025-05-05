@@ -4,11 +4,20 @@ import { getProductById } from "../services/useBackend";
 import NewsletterForm from "../components/newsletterForm";
 import StarRating from "../components/StarRating";
 
+import { useWishlist } from "../services/wishlistService";
+import { useCart } from "../services/cartService";
+
 
 const MainProductDetails: React.FC<{productId: string}> = ({productId}) => {
     const [product, setProduct] = useState<any>(null);
     const [quantity, setQuantity] = useState(1);
     const [productStock, setProductStock] = useState(0);
+
+    const cartContext = useCart();
+    const { addToCart } = cartContext;
+
+    const wishlistContext = useWishlist();
+    const { addToWishlist, removeFromWishlist, isInWishlist } = wishlistContext;
 
     useEffect(() => {
         getProductById(productId).then((productData) => {
@@ -29,19 +38,18 @@ const MainProductDetails: React.FC<{productId: string}> = ({productId}) => {
 
     const handleAddToCart = () => {
         if (product) {
-            // addToCart(product.id, quantity);
-            // showAddToCartMessage();
+            addToCart(product.id, quantity);
         }
     };
 
     const handleWishlistToggle = () => {
-        // if (product) {
-        //     if (isInWishlist(product.id)) {
-        //         removeFromWishlist(product.id);
-        //     } else {
-        //         addToWishlist(product.id);
-        //     }
-        // }
+        if (product) {
+            if (isInWishlist(product.id)) {
+                removeFromWishlist(product.id);
+            } else {
+                addToWishlist(product.id);
+            }
+        }
     };
 
     const ProductMeta = () => {
@@ -76,7 +84,9 @@ const MainProductDetails: React.FC<{productId: string}> = ({productId}) => {
 
     const PurchaseActions = () => {
         if (!product) return <></>;
-        const isInWishlist = (id: string) => true;
+
+        const wishlistContext = useWishlist();
+        const { isInWishlist } = wishlistContext;
 
         return (
             <div className="purchase-actions">

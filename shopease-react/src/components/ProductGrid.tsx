@@ -96,6 +96,14 @@ export const ProductCard: React.FC<{product: Product}> = ({ product }) => {
     );
 }
 
+export const EmptyProductGrid: React.FC<{ products: Product[] }> = ({ products }) => { 
+    return (
+        <>
+            {products.map(product => <ProductCard key={product.id} product={product} />)}
+        </>
+    );
+}
+
 const ProductGrid: React.FC<{ filter: string | null }> = ({ filter }) => {
     const CardsSkeleton: React.FC<{ count: number }> = ({ count }) => {
         return (
@@ -138,11 +146,7 @@ const ProductGrid: React.FC<{ filter: string | null }> = ({ filter }) => {
 
     return (
         <div className="product-grid">
-            {loading ? (
-                <CardsSkeleton count={4} />
-            ) : (
-                products.map(product => <ProductCard key={product.id} product={product} />)
-            )}
+            {loading ? <CardsSkeleton count={4} /> : <EmptyProductGrid products={products} />}
         </div>
     );
 }
