@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../services/useBackend";
+import { getProducts, getProductById } from "../services/useBackend";
 import NewsletterForm from "../components/newsletterForm";
 import StarRating from "../components/StarRating";
+import { EmptyProductGrid } from "../components/ProductGrid";
+import type { Product } from "../components/ProductGrid";
 
 import { useWishlist } from "../services/wishlistService";
 import { useCart } from "../services/cartService";
@@ -455,6 +457,46 @@ const ProductTabs: React.FC = () => {
     );
 }
 
+const SimilarProducts: React.FC<{productId: string}> = ({productId}) => {
+    const findRelatedProducts = async (productId: string) => {
+        return await getProductById(productId)
+            .then(async (product) => {
+                try {
+                    const products = await getProducts();
+                    if (!products) {
+                        console.error("No products found for related products search");
+                        return [];
+                    }
+                    const relatedProducts = products.filter(
+                        (p: Product)=> p.id !== product.id
+                        && p.tags.split(', ').some(tag => product.tags.split(', ').includes(tag))
+                    );
+                    return relatedProducts.slice(0, 4);
+                } catch (error) {
+                    console.error("Error fetching related products:", error);
+                    return [];
+                }
+            }
+        )
+    }
+
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        findRelatedProducts(productId)
+            .then(prods => setProducts(prods))
+    }, [])
+
+    return (
+        <section className="related-products">
+            <h2>You May Also Like</h2>
+            <div className="related-product-grid">
+                <EmptyProductGrid products={products} />
+            </div>
+        </section>  
+    )
+}
+
 const ProductDetail: React.FC = () => {
     const { id } = useParams();
 
@@ -462,6 +504,7 @@ const ProductDetail: React.FC = () => {
         <>
             <MainProductDetails productId={id || '1'} /> 
             <ProductTabs />
+            <SimilarProducts productId={id || '1'} />
             <NewsletterForm />
         </>
     );
