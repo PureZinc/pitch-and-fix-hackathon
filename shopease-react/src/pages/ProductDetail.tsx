@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { getProductById } from "../services/useBackend";
 import NewsletterForm from "../components/newsletterForm";
 import StarRating from "../components/StarRating";
@@ -50,9 +51,9 @@ const MainProductDetails: React.FC<{productId: string}> = ({productId}) => {
             productStock > 0 ? `${productStock} In Stock` : "Out of Stock";
         const stockClass = productStock > 0 ? "in-stock" : "out-of-stock";
         const SKU = product.variants[0].sku || "WH-100-BLK";
-        const categories = (product.tags || "Audio, Headphones")
+        const categories: string[] = (product.tags || "Audio, Headphones")
             .split(", ")
-            .filter((cat) => cat !== "featured");
+            .filter((cat: string) => cat !== "featured");
 
         return (
             <div className="product-meta">
@@ -63,7 +64,7 @@ const MainProductDetails: React.FC<{productId: string}> = ({productId}) => {
                     {categories.map((cat, index) => (
                         <a
                             key={index}
-                            href={`/pages/products.html#${cat.toLowerCase()}`}
+                            href="/products"
                         >
                             {cat}
                         </a>
@@ -444,10 +445,12 @@ const ProductTabs: React.FC = () => {
     );
 }
 
-const ProductDetail: React.FC<{productId: string}> = ({productId}) => {
+const ProductDetail: React.FC = () => {
+    const { id } = useParams();
+
     return (
         <>
-            <MainProductDetails productId={productId} /> 
+            <MainProductDetails productId={id || '1'} /> 
             <ProductTabs />
             <NewsletterForm />
         </>
