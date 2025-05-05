@@ -30,3 +30,10 @@ export const postNewsletterSubscription = async (email: string) => {
   return response.json();
 }
 
+export const getBlogs = async () => {
+  const response = await fetch(`${BACKEND_URL}/blogs`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch blogs");
+  }
+  return response.json();
+}

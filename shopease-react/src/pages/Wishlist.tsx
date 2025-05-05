@@ -11,8 +11,6 @@ export default function Wishlist() {
     const { wishList, isInWishlist } = wishlistContext;
     const [wishListItems, setWishListItems] = useState<Product[]>([]);
 
-    console.log(wishList);
-
     useEffect(() => {
         getProducts()
             .then((products) => {

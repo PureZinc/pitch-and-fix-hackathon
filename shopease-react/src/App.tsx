@@ -15,6 +15,9 @@ import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import Wishlist from './pages/Wishlist';
+import Blog from './pages/Blog';
+import Contact from './pages/Contact';
+import Checkout from './pages/Checkout';
 
 
 function App() {
@@ -23,9 +26,9 @@ function App() {
     { name: 'Products', path: '/products', element: <Products /> },
     { name: 'Product Detail', path: '/product/:id', element: <ProductDetail /> },
     { name: 'Wishlist', path: '/wishlist', element: <Wishlist /> },
-    { name: 'Blog', path: '/blog', element: <h1>Blog</h1> },
-    { name: 'Contact', path: '/contact', element: <h1>Contact</h1> },
-    { name: 'Checkout', path: '/checkout', element: <h1>Checkout</h1> },
+    { name: 'Blog', path: '/blog', element: <Blog /> },
+    { name: 'Contact', path: '/contact', element: <Contact /> },
+    { name: 'Checkout', path: '/checkout', element: <Checkout /> },
   ];
 
   return (

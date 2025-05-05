@@ -16,6 +16,7 @@ interface CartContextType {
     addToCart: (product: Omit<CartItem, "quantity" | "total">, quantity?: number) => void;
     removeFromCart: (productId: string) => void;
     updateItemQuantity: (productId: string, newQuantity: number) => void;
+    isInCart: (productId: string) => boolean;
 }
 
 // Cart Context for Global State Management
@@ -82,9 +83,14 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         );
     };
 
+    const isInCart = (productId: string) => {
+        productId = productId.toString();
+        return cart.some(item => item.id === productId);
+    };
+
     return (
         <CartContext.Provider
-            value={{ cart, addToCart, removeFromCart, updateItemQuantity }}
+            value={{ cart, addToCart, removeFromCart, updateItemQuantity, isInCart }}
         >
             {children}
         </CartContext.Provider>
