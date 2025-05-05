@@ -14,6 +14,7 @@ import './styles/product-detail.css';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
+import { CartPage } from './pages/Cart';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
     { name: 'Home', path: '/', element: <Home /> },
     { name: 'Products', path: '/products', element: <Products /> },
     { name: 'Product Detail', path: '/product/:id', element: <ProductDetail /> },
+    { name: 'Cart', path: '/cart', element: <CartPage /> },
     { name: 'Wishlist', path: '/wishlist', element: <h1>Wishlist</h1> },
     { name: 'Blog', path: '/blog', element: <h1>Blog</h1> },
     { name: 'Contact', path: '/contact', element: <h1>Contact</h1> },

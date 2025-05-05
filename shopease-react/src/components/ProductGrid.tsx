@@ -1,7 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getProducts } from '../services/useBackend';
 import { useNavigate } from 'react-router-dom';
 import StarRating from './StarRating';
+
+import { CartContext } from '../services/cartService';
+import type { CartItem } from '../services/cartService';
 
 export interface Product {
     id: number;
@@ -51,6 +54,23 @@ export const ProductCard: React.FC<{product: Product}> = ({ product }) => {
     );
 
     const navigate = useNavigate();
+    const cartContext = useContext(CartContext);
+        if (!cartContext) {
+        throw new Error("CartDropdown must be used within a CartProvider");
+    }
+
+    const { addToCart } = cartContext;
+
+    const productToCartItem = (product: Product): CartItem => {
+        return {
+            id: product.id.toLocaleString(),
+            name: product.title,
+            price: parseFloat(product.variants[0].price),
+            imageSrc: product.image.src,
+            quantity: 1,
+            total: parseFloat(product.variants[0].price),
+        };
+    }; 
 
     return (
         <div className="product-card">
@@ -64,7 +84,12 @@ export const ProductCard: React.FC<{product: Product}> = ({ product }) => {
                 <ProductRating product={product} />
                 <ProductQuantity product={product} />
                 {product.variants[0].inventory_quantity && 
-                    <button className="add-to-cart-btn">Add to Cart</button>
+                    <button
+                        className="add-to-cart-btn"
+                        onClick={() => addToCart(productToCartItem(product))}
+                    >
+                        Add to Cart
+                    </button>
                 }
             </div>
         </div>
@@ -97,7 +122,7 @@ const ProductGrid: React.FC<{ filter: string | null }> = ({ filter }) => {
         setLoading(true);
         getProducts().then((fetchedProducts) => {
             if (filter) {
-                const filteredProducts = fetchedProducts.filter(product => {
+                const filteredProducts = fetchedProducts.filter((product: Product) => {
                     const productTags = product.tags.split(', ').map(tag => tag.trim().toLowerCase());
                     return productTags.includes(filter.toLowerCase());
                 });
