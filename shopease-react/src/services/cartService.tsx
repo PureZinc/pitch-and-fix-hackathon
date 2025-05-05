@@ -19,14 +19,19 @@ interface CartContextType {
 }
 
 // Cart Context for Global State Management
-export const CartContext = React.createContext<CartContextType | null>(null);
+const CartContext = React.createContext<CartContextType | null>(null);
 
 interface CartProviderProps {
     children: ReactNode;
 }
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-    const [cart, setCart] = useState<CartItem[]>([]);
+    const getCartFromLocalStorage = () => {
+        const savedCart = localStorage.getItem("shopease_cart");
+        return savedCart ? JSON.parse(savedCart) : [];
+    }
+
+    const [cart, setCart] = useState<CartItem[]>(getCartFromLocalStorage());
 
     // Load cart from localStorage on mount
     useEffect(() => {

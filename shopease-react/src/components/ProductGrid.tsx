@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getProducts } from '../services/useBackend';
 import { useNavigate } from 'react-router-dom';
 import StarRating from './StarRating';
 
-import { CartContext } from '../services/cartService';
+import { useCart } from '../services/cartService';
 import type { CartItem } from '../services/cartService';
 
 export interface Product {
@@ -54,11 +54,7 @@ export const ProductCard: React.FC<{product: Product}> = ({ product }) => {
     );
 
     const navigate = useNavigate();
-    const cartContext = useContext(CartContext);
-        if (!cartContext) {
-        throw new Error("CartDropdown must be used within a CartProvider");
-    }
-
+    const cartContext = useCart();
     const { addToCart } = cartContext;
 
     const productToCartItem = (product: Product): CartItem => {

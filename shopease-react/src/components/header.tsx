@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
-import { CartContext } from "../services/cartService";
+import { useState } from "react";
+import { useCart } from "../services/cartService";
 
 
 const CartDropdown: React.FC = () => {
-    const cartContext = useContext(CartContext);
-    if (!cartContext) throw new Error("CartDropdown must be used within a CartProvider");
-
+    const cartContext = useCart();
     const { cart, removeFromCart } = cartContext;
 
     return (
@@ -48,8 +46,7 @@ const CartDropdown: React.FC = () => {
 const Cart: React.FC = () => {
     const [cartOpen, setCartOpen] = useState(false);
 
-    const cartContext = useContext(CartContext);
-    if (!cartContext) throw new Error("Cart must be used within a CartProvider");
+    const cartContext = useCart();
     const { cart } = cartContext;
 
     return (
