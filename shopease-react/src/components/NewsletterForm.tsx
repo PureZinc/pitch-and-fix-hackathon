@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { postNewsletterSubscription } from '../services/useBackend';
 
 const NewsletterForm: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -6,7 +7,13 @@ const NewsletterForm: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setSuccessMessage('Thank you for subscribing!');
+        postNewsletterSubscription(email)
+            .then((response) => {
+                setSuccessMessage(response.message || 'Subscription successful!');
+            })
+            .catch((error) => {
+                setSuccessMessage(`Subscription failed: ${error.message}`);
+            });
         setEmail('');
     };
 

@@ -16,3 +16,17 @@ export const getProductById = async (id: string) => {
   return response.json();
 };
 
+export const postNewsletterSubscription = async (email: string) => {
+  const response = await fetch(`${BACKEND_URL}/subscribe`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to subscribe to newsletter");
+  }
+  return response.json();
+}
+

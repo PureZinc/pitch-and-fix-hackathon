@@ -56,28 +56,17 @@ app.get('/', (req, res) => {
 });
 
 // Subscribe to newsletter
-// This endpoint adds a new subscriber to the database and Shopify
+// This endpoint adds a new subscriber to Shopify
 app.post('/subscribe', async (req, res) => {
     const { email } = req.body;
-    
-    const addToDatabase = async (email) => {
-        const existingSubscriber = await prisma.subscriber.findUnique({
-            where: { email },
-        });
 
-        if (existingSubscriber) {
-            return res.status(400).json({ message: 'Email already subscribed' });
+    const addToShopify = async (email) => {
+        // Check if the email already exists in Shopify
+        const existingCustomers = await shopify.customer.list({ email });
+        if (existingCustomers.length > 0) {
+            throw new Error("Email is already subscribed")
         }
 
-        // Create a new subscriber in the database
-        const newSubscriber = await prisma.subscriber.create({
-            data: { email },
-        });
-
-        return newSubscriber
-    }
-
-    const addToShopify = async (email) => { 
         await shopify.customer.create({
             email,
             tags: 'Newsletter Subscriber',
@@ -85,47 +74,11 @@ app.post('/subscribe', async (req, res) => {
     }
 
     try {
-        await addToDatabase(email);
         await addToShopify(email);
         res.status(201).json({ message: 'Thank you for subscribing!' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-app.post('/unsubscribe', async (req, res) => {
-    const { email } = req.body;
-
-    const removeFromDatabase = async (email) => {
-        const existingSubscriber = await prisma.subscriber.findUnique({
-            where: { email },
-        });
-
-        if (!existingSubscriber) {
-            return res.status(400).json({ message: 'Email not found' });
-        }
-
-        // Remove subscriber from the database
-        await prisma.subscriber.delete({
-            where: { email },
-        });
-    }
-
-    const removeFromShopify = async (email) => {
-        const customers = await shopify.customer.list({ email });
-        if (customers.length > 0) {
-            await shopify.customer.delete(customers[0].id);
-        }
-    }
-
-    try {
-        removeFromDatabase(email);
-        removeFromShopify(email);
-        res.status(200).json({ message: 'Successfully unsubscribed' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: error.message || 'Internal server error' });
     }
 });
 
