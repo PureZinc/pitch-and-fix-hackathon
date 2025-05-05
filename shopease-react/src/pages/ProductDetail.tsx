@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getProductById } from "../services/useBackend";
 import NewsletterForm from "../components/newsletterForm";
+import StarRating from "../components/StarRating";
 
 
 const MainProductDetails: React.FC<{productId: string}> = ({productId}) => {
@@ -129,11 +130,7 @@ const MainProductDetails: React.FC<{productId: string}> = ({productId}) => {
                     <div className="product-info">
                         <h1 className="product-title">{product.title}</h1>
                         <div className="product-rating">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star-half-alt"></i>
+                            <StarRating rating={product.variants[0].rating} />
                             <span className="rating-count">(42 reviews)</span>
                         </div>
                         <div className="product-price">
@@ -274,6 +271,8 @@ const ProductTabs: React.FC = () => {
             },
         ]
 
+        const ratingPercentages = [65, 25, 8, 2, 0] // The percentages of each rating from 5 to 1 stars
+
         return (
             <div id="reviews" className="tab-content">
                 <h2>Customer Reviews</h2>
@@ -281,50 +280,23 @@ const ProductTabs: React.FC = () => {
                     <div className="average-rating">
                         <span className="rating-number">4.5</span>
                         <div className="stars">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star-half-alt"></i>
+                            <StarRating rating={4.5} />
                         </div>
-                        <span className="total-reviews">Based on 42 reviews</span>
+                        <span className="total-reviews">Based on {reviews.length} reviews</span>
                     </div>
                     <div className="rating-breakdown">
-                        <div className="rating-bar">
-                            <span className="rating-level">5 Star</span>
-                            <div className="progress-bar">
-                                <div className="progress" style={{ width: "65%" }}></div>
+                        {ratingPercentages.map((percentage, index) => (
+                            <div key={index} className="rating-bar">
+                                <span className="rating-level">{5 - index} Star</span>
+                                <div className="progress-bar">
+                                    <div
+                                        className="progress"
+                                        style={{ width: `${percentage}%` }}
+                                    ></div>
+                                </div>
+                                <span className="rating-percent">{percentage}%</span>
                             </div>
-                            <span className="rating-percent">65%</span>
-                        </div>
-                        <div className="rating-bar">
-                            <span className="rating-level">4 Star</span>
-                            <div className="progress-bar">
-                                <div className="progress" style={{ width: "25%" }}></div>
-                            </div>
-                            <span className="rating-percent">25%</span>
-                        </div>
-                        <div className="rating-bar">
-                            <span className="rating-level">3 Star</span>
-                            <div className="progress-bar">
-                                <div className="progress" style={{ width: "8%" }}></div>
-                            </div>
-                            <span className="rating-percent">8%</span>
-                        </div>
-                        <div className="rating-bar">
-                            <span className="rating-level">2 Star</span>
-                            <div className="progress-bar">
-                                <div className="progress" style={{ width: "2%" }}></div>
-                            </div>
-                            <span className="rating-percent">2%</span>
-                        </div>
-                        <div className="rating-bar">
-                            <span className="rating-level">1 Star</span>
-                            <div className="progress-bar">
-                                <div className="progress" style={{ width: "0%" }}></div>
-                            </div>
-                            <span className="rating-percent">0%</span>
-                        </div>
+                        ))}
                     </div>
                 </div>
                 <div className="user-reviews">
@@ -335,18 +307,7 @@ const ProductTabs: React.FC = () => {
                                 <div className="review-date">{review.date}</div>
                             </div>
                             <div className="review-rating">
-                                {Array.from({ length: 5 }, (_, i) => (
-                                    <i
-                                        key={i}
-                                        className={`fas fa-star ${
-                                            i < Math.floor(review.rating)
-                                                ? ""
-                                                : i < review.rating
-                                                ? "fa-star-half-alt"
-                                                : "far fa-star"
-                                        }`}
-                                    ></i>
-                                ))}
+                                <StarRating rating={review.rating} />
                             </div>
                             <div className="review-title">{review.title}</div>
                             <div className="review-content">

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { getProducts } from '../services/useBackend';
 import { useNavigate } from 'react-router-dom';
+import StarRating from './StarRating';
 
 export interface Product {
     id: number;
@@ -31,17 +32,7 @@ export const ProductCard: React.FC<{product: Product}> = ({ product }) => {
     const ProductRating: React.FC<{ product: any }> = ({ product }) => (
         product.rating ? (
             <div className="product-rating">
-                {Array.from({ length: 5 }, (_, i) => (
-                    i < Math.floor(product.rating) ? (
-                        <i key={i} className="fas fa-star"></i>
-                    ) : (
-                        i < product.rating ? (
-                            <i key={i} className="fas fa-star-half-alt"></i>
-                        ) : (
-                            <i key={i} className="far fa-star"></i>
-                        )
-                    )
-                ))}
+                <StarRating rating={product.rating} />
                 <span className="rating-count">({product.ratingCount})</span>
             </div>
         ) : null
