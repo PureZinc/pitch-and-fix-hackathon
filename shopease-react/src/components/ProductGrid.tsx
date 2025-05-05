@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { getProducts } from '../services/useBackend';
 import { useNavigate } from 'react-router-dom';
 
-interface Product {
+export interface Product {
     id: number;
     title: string;
     image: { src: string };

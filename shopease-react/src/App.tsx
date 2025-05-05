@@ -13,13 +13,14 @@ import './styles/product-detail.css';
 // Import pages
 import Home from './pages/Home';
 import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
 
 
 function App() {
   const pages = [
     { name: 'Home', path: '/', element: <Home /> },
     { name: 'Products', path: '/products', element: <Products /> },
-    { name: 'Product Detail', path: '/product/:id', element: <h1>Product Detail</h1> },
+    { name: 'Product Detail', path: '/product/:id', element: <ProductDetail /> },
     { name: 'Wishlist', path: '/wishlist', element: <h1>Wishlist</h1> },
     { name: 'Blog', path: '/blog', element: <h1>Blog</h1> },
     { name: 'Contact', path: '/contact', element: <h1>Contact</h1> },
