@@ -55,6 +55,7 @@ app.get('/', (req, res) => {
   res.send('Shopify + Prisma + Express Backend Running');
 });
 
+
 // Subscribe to newsletter
 // This endpoint adds a new subscriber to Shopify
 app.post('/subscribe', async (req, res) => {
@@ -134,37 +135,6 @@ app.get('/blogs/:id', async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
-});
-
-
-// Add a product to the cart (mock implementation)
-app.post('/cart/add', (req, res) => {
-    const { productId, quantity } = req.body;
-
-    // Mock cart logic
-    const cart = req.session.cart || [];
-    const existingProduct = cart.find((item) => item.productId === productId);
-
-    if (existingProduct) {
-        existingProduct.quantity += quantity;
-    } else {
-        cart.push({ productId, quantity });
-    }
-
-    req.session.cart = cart;
-    res.json(cart);
-});
-
-// Remove a product from the cart (mock implementation)
-app.post('/cart/remove', (req, res) => {
-    const { productId } = req.body;
-
-    // Mock cart logic
-    const cart = req.session.cart || [];
-    const updatedCart = cart.filter((item) => item.productId !== productId);
-
-    req.session.cart = updatedCart;
-    res.json(updatedCart);
 });
 
 // Pay for the Shopify cart
