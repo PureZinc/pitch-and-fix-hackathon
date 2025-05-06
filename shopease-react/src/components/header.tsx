@@ -1,53 +1,55 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useCart } from "../services/cartService";
+import { useNavigate } from "react-router-dom";
 
-
-const CartDropdown: React.FC = () => {
-    const cartContext = useCart();
-    const { cart, removeFromCart } = cartContext;
-
-    return (
-        <div className="cart-dropdown">
-            <div className="cart-items">
-                {cart.length === 0 ? (
-                    <p className="empty-cart">Your cart is empty</p>
-                ) : (
-                    cart.map((item) => (
-                        <div key={item.id} className="cart-dropdown-item">
-                            <div className="item-details">
-                                <h4>{item.name}</h4>
-                                <p>${item.price}</p>
-                                <p>Quantity: {item.quantity}</p>
-                                <img
-                                    src={item.imageSrc}
-                                    alt={item.name}
-                                    className="cart-item-image"
-                                />
-                            </div>
-                            <button onClick={() => removeFromCart(item.id)}>×</button>
-                        </div>
-                    ))
-                )}
-            </div>
-            <div className="cart-total">
-                Total: $
-                {cart.reduce((total, item) => total + item.total, 0).toFixed(2)}
-            </div>
-            <Link to="/checkout">
-                <button id="checkout-btn" className="checkout-btn">
-                    Checkout
-                </button>
-            </Link>
-        </div>
-    );
-};
 
 const Cart: React.FC = () => {
     const [cartOpen, setCartOpen] = useState(false);
 
     const cartContext = useCart();
-    const { cart } = cartContext;
+    const { cart, removeFromCart } = cartContext;
+    const nav = useNavigate();
+
+    const CartDropdown: React.FC = () => {
+        const goToCheckout = () => {
+            nav("/checkout");
+            setCartOpen(false);
+        }
+        
+        return (
+            <div className="cart-dropdown">
+                <div className="cart-items">
+                    {cart.length === 0 ? (
+                        <p className="empty-cart">Your cart is empty</p>
+                    ) : (
+                        cart.map((item) => (
+                            <div key={item.id} className="cart-dropdown-item">
+                                <div className="item-details">
+                                    <h4>{item.name}</h4>
+                                    <p>${item.price}</p>
+                                    <p>Quantity: {item.quantity}</p>
+                                    <img
+                                        src={item.imageSrc}
+                                        alt={item.name}
+                                        className="cart-item-image"
+                                    />
+                                </div>
+                                <button onClick={() => removeFromCart(item.id)}>×</button>
+                            </div>
+                        ))
+                    )}
+                </div>
+                <div className="cart-total">
+                    Total: $
+                    {cart.reduce((total, item) => total + item.total, 0).toFixed(2)}
+                </div>
+                <button id="checkout-btn" className="checkout-btn" onClick={goToCheckout}>
+                    Checkout
+                </button>
+            </div>
+        );
+    };
 
     return (
         <div className="cart-container">
