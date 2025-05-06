@@ -65,14 +65,16 @@ app.post('/subscribe', async (req, res) => {
         // Check if the email already exists in Shopify
         const existingCustomers = await shopify.customer.list({ email });
         if (existingCustomers.length > 0) {
-            throw new Error("Email is already subscribed")
+            throw new Error("Email is already subscribed");
         }
 
+        // Add the customer as a subscriber
         await shopify.customer.create({
             email,
             tags: 'Newsletter Subscriber',
+            accepts_marketing: true,
         });
-    }
+    };
 
     try {
         await addToShopify(email);
@@ -137,32 +139,31 @@ app.get('/blogs/:id', async (req, res) => {
     }
 });
 
-// Pay for the Shopify cart
-app.post('/cart/pay', async (req, res) => {
-    const { email, lineItems } = req.body;
+// Create an order
+app.post('/checkout', async (req, res) => {
+    const { email, lineItems, shippingAddress, billingAddress } = req.body;
 
     if (!email || !lineItems || !Array.isArray(lineItems) || lineItems.length === 0) {
         return res.status(400).json({ message: 'Invalid request payload' });
     }
 
+    if (!shippingAddress || !billingAddress) {
+        return res.status(400).json({ message: 'Missing required fields: shippingAddress or billingAddress' });
+    }
+
     try {
-        // Create a draft order in Shopify
-        const draftOrder = await shopify.draftOrder.create({
+        // Create an order in Shopify
+        const order = await shopify.order.create({
             email,
             line_items: lineItems,
-            use_customer_default_address: true,
+            shipping_address: shippingAddress,
+            billing_address: billingAddress,
+            financial_status: 'pending',
         });
 
-        // Complete the draft order to process payment
-        const completedOrder = await shopify.draftOrder.complete(draftOrder.id);
-
-        res.status(201).json({
-            message: 'Payment successful',
-            order: completedOrder,
-        });
+        res.status(201).json({message: 'Order created successfully', order});
     } catch (error) {
-        console.error('Error processing payment:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: error.message || 'Internal server error' });
     }
 });
 

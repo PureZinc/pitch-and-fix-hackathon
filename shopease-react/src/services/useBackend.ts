@@ -1,3 +1,5 @@
+import type { CartItem } from "./cartService";
+
 const BACKEND_URL = "http://localhost:3000";
 
 export const getProducts = async () => {
@@ -37,3 +39,31 @@ export const getBlogs = async () => {
   }
   return response.json();
 }
+
+export interface CheckoutInterface {
+  email: string;
+  address: string;
+  items: CartItem[];
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+}
+export const postCheckout = async (post: CheckoutInterface) => {
+  const response = await fetch(`${BACKEND_URL}/checkout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: post.email,
+      lineItems: post.items,
+      shippingAddress: post.address,
+      billingAddress: post.address
+    }),
+  });
+  if (!response.ok) {
+    console.log()
+    throw new Error("Failed to order items");
+  }
+  return response.json();
+} 

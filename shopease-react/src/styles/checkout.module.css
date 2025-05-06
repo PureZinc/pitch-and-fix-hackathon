@@ -1,0 +1,136 @@
+/* Checkout Section */
+.checkout {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.checkoutTitle {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Cart Product Grid */
+.cartProductGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Product Card */
+.productCard {
+    display: flex;
+    flex-direction: column;
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.productImage {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.productDetails {
+    padding: 15px;
+}
+
+.productName {
+    font-size: 1.2rem;
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.productQuantity,
+.productPrice {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: #555;
+}
+
+.addToCartBtn {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.addToCartBtn:hover {
+    background-color: #d62839;
+}
+
+/* Checkout Details */
+.checkoutDetails {
+    margin-top: 20px;
+}
+
+.checkoutDetailsTitle {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.checkoutDetailsText {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: #555;
+}
+
+/* Checkout Form */
+.checkoutForm {
+    margin-top: 20px;
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formLabel {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.formInput,
+.formTextarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.formTextarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.submitButton {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #2a9d8f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+    background-color: #21867a;
+}
